@@ -2,7 +2,6 @@ from CircuitAIBot.CircuitAiJsonFileHandler import CircuitAiJsonFileHandler
 
 filePath = "config_Files/botAdminUser.json"
 
-
 class PermissionHandler:
 
     def getPermsFromJson(self):
@@ -33,6 +32,5 @@ class PermissionHandler:
           del permits[str(role.id)]
 
         CircuitAiJsonFileHandler().overwriteJasonFile(filePath,permits)
-
 
 

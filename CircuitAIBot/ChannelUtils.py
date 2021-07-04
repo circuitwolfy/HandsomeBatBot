@@ -7,9 +7,12 @@ class ChannelUtils:
 
         if before.channel is not None:
             guildConfig = config[str(before.channel.guild.id)]
+            channels = str(guildConfig["vcStartChannelId"])
+            # Channel in Kategorie
             if str(guildConfig["vcStartCategory"]) != "0" or str(guildConfig["vcStartChannelId"]) != "0":
+                # Wenn in Kategorie & nicht ein Start Channel und anzahl 0 Lösche Channel
                 if str(before.channel.category.id) == str(guildConfig["vcStartCategory"]) and len(
-                        before.channel.members) == 0 and str(guildConfig["vcStartChannelId"]) != str(before.channel.id):
+                        before.channel.members) == 0 and channels.find(str(before.channel.id)) != -1:
                     if len(before.channel.members) == 0:
                         await before.channel.delete()
             else:
@@ -17,15 +20,16 @@ class ChannelUtils:
 
         if after.channel is not None:
             guildConfig = config[str(after.channel.guild.id)]
+            channels = str(guildConfig["vcStartChannelId"])
             if str(guildConfig["vcStartCategory"]) != "0" or str(guildConfig["vcStartChannelId"]) != "0":
 
-                if str(after.channel.category.id) == str(guildConfig["vcStartCategory"]) and str(
-                        guildConfig["vcStartChannelId"]) == str(after.channel.id):
-                    tmpcat = after.channel.category
-                    channel = await tmpcat.create_voice_channel(member.name + "'s Voice Chat")
+                if str(after.channel.category.id) == str(guildConfig["vcStartCategory"]) and channels.find(
+                        str(before.channel.id)) != -1:
+                    channel = await after.clone(name=member.name + "'s Voice Chat")
                     await channel.set_permissions(member, manage_channels=True)
                     await member.move_to(channel)
 
+    # OLD V0.5
     async def chageAgeRestrictionOnChannel(self, before, after, config):
 
         guildConfig = config[str(after.channel.guild.id)]
@@ -33,12 +37,13 @@ class ChannelUtils:
 
         if adultRoleName != "0":
             # Change to USK 18
-            if str(after.category) == str(guildConfig["vcStartCategory"]) and "18" in str(after.name) and not "18" in str(before.name):
+            if str(after.category) == str(guildConfig["vcStartCategory"]) and "18" in str(
+                    after.name) and not "18" in str(before.name):
                 roles = after.guild.roles
                 for role in roles:
                     if role.id == adultRoleName:
                         await after.set_permissions(role, view_channel=True)
-                    elif 1==0:
+                    elif 1 == 0:
                         await after.set_permissions(role, view_channel=False)
 
             if str(after.category) == "TEMP VC" and "18" in str(before.name) and "18" not in str(after.name):
@@ -59,7 +64,6 @@ class ChannelUtils:
         tmpStartChannel = await tmpcat.create_voice_channel("StartTempVc")
         ConfigurationHandler().setvcStartCategory(tmpcat.id, guild.id)
         ConfigurationHandler().setvcStartChannelId(tmpStartChannel.id, guild.id)
-
 
     async def setTempStartChannel(self, message):
         cmdContent = message.content.split(" ")

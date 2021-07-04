@@ -42,11 +42,17 @@ class ConfigurationHandler:
 
     def setvcStartChannelId(self, vcStartChannelId, guildid):
         config = self.loadConfig()
-        config[str(guildid)]["vcStartChannelId"] = vcStartChannelId
+        config[str(guildid)]["vcStartChannelId"]+=vcStartChannelId
+        self.updateconfig(config)
+
+    def removeVcStartChannelId(self, vcStartChannelId, guildid):
+        config = self.loadConfig()
+        config[str(guildid)]["vcStartChannelId"]-= vcStartChannelId
         self.updateconfig(config)
 
     def setvcStartCategory(self, vcStartCategory, guildid):
         config = self.loadConfig()
+
         config[str(guildid)]["vcStartCategory"] = vcStartCategory
         self.updateconfig(config)
 

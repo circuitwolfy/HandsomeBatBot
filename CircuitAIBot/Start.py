@@ -8,16 +8,18 @@ from CircuitAIBot.PermissionHandler import PermissionHandler
 
 client = discord.Client()
 adultRoleName = "Pink"
-version= "BETA_0.5.2"
+version= "BETA_0.6"
 
+testTokenFile=open("config_Files/tokenTest", "r")
+prodTokenFile=open("config_Files/tokenProd", "r")
 
-token = ""
+token=testTokenFile.read();
 
 
 @client.event
 async def on_ready():
     await client.change_presence(
-        activity=discord.Activity(type=discord.ActivityType.streaming, name="Pet me! ~pat"))
+        activity=discord.Activity(type=discord.ActivityType.streaming, name=version))
     print("CCCCCCCCCCCCCC IIIII RRRRRRRRRRRRR    CCCCCCCCCCCCCC UUUU     UUUU IIIIII TTTTTTTTTTTTTTTTTTT     ")
     print("CCCCCCCCCCCCCC IIIII RRRRRR      RRR  CCCCCCCCCCCCCC UUUU     UUUU IIIIII TTTTTTTTTTTTTTTTTTT   ")
     print("CCCCCC         IIIII RRRRRR      RR   CCCCCC         UUUU     UUUU IIIIII       TTTTTT          ")
@@ -52,16 +54,10 @@ async def on_message(message):
         configTempVc = reloadConfig()
 
 
-        if str(message.channel.id)== "728161191435698196":
-            print(str(message.content))
-            if str(message.content).find("*")!= -1:
-                await message.channel.send("RP Bitte in Lobby RP")
-
         if message.content.startswith("~info"):
             await message.channel.send("Running on version "+ version)
             ausgabe = str(platform.machine()) + str(platform.system()) + str(platform.release()) + str(platform.processor()) + str(platform.node() + str(platform.uname()))
             await message.channel.send(ausgabe)
-
         if message.content.startswith("~pat"):
             await message.channel.send("*happy scream*")
             await message.channel.send("https://giphy.com/gifs/baby-bat-im-doing-gifs-again-ykvLH7H2fKQE")
@@ -77,7 +73,7 @@ async def on_message(message):
             else:
                 await message.channel.send("Warning autoconfig already done use **~fautoconfig** to overwrite")
 
-        if message.content.startswith("~fautoconfig") and PermissionHandler().chckperms(message.author.roles):
+        if message.content.startswith("~fautoconfig") and PermissionHandler().chckperms(message):
             await ChannelUtils().autoconfig(message.guild)
 
         if message.content.startswith("~addrole") and PermissionHandler().chckperms(message):
@@ -88,10 +84,10 @@ async def on_message(message):
             for role in message.role_mentions:
                 PermissionHandler().removePermitRole(role)
 
-        if message.content.startswith("~tempchannel") and PermissionHandler().chckperms(message):
+        if message.content.startswith("~addtempchannel") and PermissionHandler().chckperms(message):
             if message.content == "~tempchannel":
                 await message.channel.send(
-                    "~tempchannel <Channel ID>  /n Defines the start channel for temporary voice channels.")
+                    "~addtempchannel <Channel ID>  /n Defines the start channel for temporary voice channels.")
             else:
                 await ChannelUtils().setTempStartChannel(message)
 
@@ -116,5 +112,7 @@ async def on_guild_channel_update(before, after):
 
 def reloadConfig():
     return ConfigurationHandler().loadConfig()
+
+
 
 client.run(token)
