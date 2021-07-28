@@ -8,12 +8,12 @@ from CircuitAIBot.PermissionHandler import PermissionHandler
 
 client = discord.Client()
 adultRoleName = "Pink"
-version= "BETA_0.6"
+version = "BETA_0.6"
 
-testTokenFile=open("config_Files/tokenTest", "r")
-prodTokenFile=open("config_Files/tokenProd", "r")
+testTokenFile = open("config_Files/tokenTest", "r")
+prodTokenFile = open("config_Files/tokenProd", "r")
 
-token=testTokenFile.read();
+token = testTokenFile.read();
 
 
 @client.event
@@ -28,12 +28,7 @@ async def on_ready():
     print("CCCCCCCCCCCCCC IIIII RRRRRR      RR   CCCCCCCCCCCCCC UUUUUUUUUUUUU IIIIII       TTTTTT           ")
     print("CCCCCCCCCCCCCC IIIII RRRRRR        RR CCCCCCCCCCCCCC UUUUUUUUUUUUU IIIIII       TTTTTT          ")
 
-
-
     print("Circuit AI is ready to serve my master Circuit ")
-
-
-
 
 
 @client.event
@@ -53,10 +48,10 @@ async def on_message(message):
     if message.author != client.user:
         configTempVc = reloadConfig()
 
-
         if message.content.startswith("~info"):
-            await message.channel.send("Running on version "+ version)
-            ausgabe = str(platform.machine()) + str(platform.system()) + str(platform.release()) + str(platform.processor()) + str(platform.node() + str(platform.uname()))
+            await message.channel.send("Running on version " + version)
+            ausgabe = str(platform.machine()) + str(platform.system()) + str(platform.release()) + str(
+                platform.processor()) + str(platform.node() + str(platform.uname()))
             await message.channel.send(ausgabe)
         if message.content.startswith("~pat"):
             await message.channel.send("*happy scream*")
@@ -93,26 +88,26 @@ async def on_message(message):
 
         if message.content.startswith("~setAdult") and PermissionHandler().chckperms(message):
             if message.content == "~setAdult":
-                await message.channel.send("~setAdult <adultRoleID>  /n Defines the role for 18+ temporary voice channels.")
+                await message.channel.send(
+                    "~setAdult <adultRoleID>  /n Defines the role for 18+ temporary voice channels.")
             else:
                 if len(message.role_mention) == 1:
                     for role in message.role_mentions:
                         PermissionHandler().addsetadultRole(role, role.guild)
                         await message.channel.send("Saved")
                 else:
-                    await message.channel.send("~setAdult <adultRoleID>  /n Defines the role for 18+ temporary voice channels.")
+                    await message.channel.send(
+                        "~setAdult <adultRoleID>  /n Defines the role for 18+ temporary voice channels.")
 
 
 @client.event
 async def on_guild_channel_update(before, after):
-
     print("DEBUG FUNCTION NOT IMPLEMENTED")
     # await ChannelUtils().chageAgeRestrictionOnChannel(before, after, reloadConfig())
 
 
 def reloadConfig():
     return ConfigurationHandler().loadConfig()
-
 
 
 client.run(token)
