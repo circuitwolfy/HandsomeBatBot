@@ -1,6 +1,1 @@
-{
-  "ChannelIDs": {
-    "activeTemp":{ "id":["1234", "123"]},
-    "startChannel": {"id":["1234", "123"]}
-  }
-}
+{"ChannelIDs": {"activeTemp": {"id": ["1234", "123"]}, "startChannel": {"id": ["1234", "123", "860229140837826580", "872036726690963516"]}}}

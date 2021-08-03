@@ -15,9 +15,9 @@ prodTokenFile = open("config_Files/tokenProd", "r")
 
 token = testTokenFile.read();
 
-
 @client.event
 async def on_ready():
+
     await client.change_presence(
         activity=discord.Activity(type=discord.ActivityType.streaming, name=version))
     print("CCCCCCCCCCCCCC IIIII RRRRRRRRRRRRR    CCCCCCCCCCCCCC UUUU     UUUU IIIIII TTTTTTTTTTTTTTTTTTT     ")
@@ -33,21 +33,13 @@ async def on_ready():
 
 @client.event
 async def on_voice_state_update(member, before, after):
-    configTempVc = reloadConfig()
-    if after.channel is not None:
-
-        if str(after.channel.guild.id) not in configTempVc:
-            ConfigurationHandler().createNewGuildConfig(after.channel.guild.id)
-
-    await ChannelUtils().manageTemporaryVoiceChannel(member, before, after, reloadConfig())
+        await ChannelUtils().manageTemporaryVoiceChannel(member, before, after)
 
 
 @client.event
 async def on_message(message):
     print(str(message.content))
     if message.author != client.user:
-        configTempVc = reloadConfig()
-
         if message.content.startswith("~info"):
             await message.channel.send("Running on version " + version)
             ausgabe = str(platform.machine()) + str(platform.system()) + str(platform.release()) + str(
@@ -59,46 +51,24 @@ async def on_message(message):
 
         if message.content.startswith("~name"):
             await message.channel.send("Hey I'm Handsome Bat. \n Please pet me ~pat")
-
-        if message.content.startswith("~autoconfig") and PermissionHandler().chckperms(message):
-            if configTempVc[str(message.guild.id)]["vcStartChannelId"] == "0" or configTempVc[str(message.guild.id)][
-                "vcStartCategory"] == "0":
-                await ChannelUtils().autoconfig(message.guild)
-                await message.channel.send("Doing AutoConfig!")
-            else:
-                await message.channel.send("Warning autoconfig already done use **~fautoconfig** to overwrite")
-
-        if message.content.startswith("~fautoconfig") and PermissionHandler().chckperms(message):
-            await ChannelUtils().autoconfig(message.guild)
-
+        # gives Permission to edit bot settings user with Admin got automated permission
         if message.content.startswith("~addrole") and PermissionHandler().chckperms(message):
             for role in message.role_mentions:
                 PermissionHandler().addPermitRole(role)
 
+        # Removes permission to edit bot settings user with Admin got automated permission
         if message.content.startswith("~removerole") and PermissionHandler().chckperms(message):
             for role in message.role_mentions:
                 PermissionHandler().removePermitRole(role)
 
-        if message.content.startswith("~addtempchannel") and PermissionHandler().chckperms(message):
+        if message.content.startswith("~addStartChannel") and PermissionHandler().chckperms(message):
             if message.content == "~tempchannel":
                 await message.channel.send(
                     "~addtempchannel <Channel ID>  /n Defines the start channel for temporary voice channels.")
             else:
                 await ChannelUtils().setTempStartChannel(message)
-
-        if message.content.startswith("~setAdult") and PermissionHandler().chckperms(message):
-            if message.content == "~setAdult":
-                await message.channel.send(
-                    "~setAdult <adultRoleID>  /n Defines the role for 18+ temporary voice channels.")
-            else:
-                if len(message.role_mention) == 1:
-                    for role in message.role_mentions:
-                        PermissionHandler().addsetadultRole(role, role.guild)
-                        await message.channel.send("Saved")
-                else:
-                    await message.channel.send(
-                        "~setAdult <adultRoleID>  /n Defines the role for 18+ temporary voice channels.")
-
+        if message.content.startswith("~dayMessage") and message.author.id  == 330618880642908160:
+            await client.change_presence(status=discord.Status.idle, activity=discord.Game(message.content))
 
 @client.event
 async def on_guild_channel_update(before, after):
@@ -106,8 +76,6 @@ async def on_guild_channel_update(before, after):
     # await ChannelUtils().chageAgeRestrictionOnChannel(before, after, reloadConfig())
 
 
-def reloadConfig():
-    return ConfigurationHandler().loadConfig()
 
 
 client.run(token)

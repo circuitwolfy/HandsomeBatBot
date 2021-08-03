@@ -6,7 +6,7 @@ configFilePath = "config_Files/serverTempVcConfig.json"
 class ConfigurationHandler:
 
     def loadConfig(self):
-        return CircuitAiJsonFileHandler().loadJason(configFilePath)
+        return None
 
     def createNewGuildConfig(self, guildId):
         updateSet = self.createDictForTempVc(guildId, "0", "0", "0", "0","~")
