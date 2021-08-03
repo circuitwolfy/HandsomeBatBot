@@ -13,10 +13,10 @@ version = "BETA_0.6"
 
 serverConfigFile=open("/env/batbot/config.txt", "r")
 pathToBotConfigs=serverConfigFile.read()
-#testTokenFile = open(pathToBotConfigs+"/tokenProd", "r")
-prodTokenFile = open(pathToBotConfigs+"/tokenTest", "r")
-token = prodTokenFile.read();
-token = base64.decodestring(token)
+prodTokenFile = open(pathToBotConfigs+"/tokenProd", "r")
+#testTokenFile = open(pathToBotConfigs+"/tokenTest", "r")
+token = bytes(prodTokenFile.read(), "UTF-8");
+token = base64.decodebytes(token)
 
 @client.event
 async def on_ready():
@@ -78,3 +78,4 @@ async def on_guild_channel_update(before, after):
     print("DEBUG FUNCTION NOT IMPLEMENTED")
     # await ChannelUtils().chageAgeRestrictionOnChannel(before, after, reloadConfig())
 
+client.run(str(token.decode("UTF-8")))
