@@ -1,3 +1,4 @@
+import base64
 import platform
 
 import discord
@@ -10,10 +11,12 @@ client = discord.Client()
 adultRoleName = "Pink"
 version = "BETA_0.6"
 
-testTokenFile = open("config_Files/tokenTest", "r")
-prodTokenFile = open("config_Files/tokenProd", "r")
-
-token = testTokenFile.read();
+serverConfigFile=open("/env/batbot/config.txt", "r")
+pathToBotConfigs=serverConfigFile.read()
+#testTokenFile = open(pathToBotConfigs+"/tokenProd", "r")
+prodTokenFile = open(pathToBotConfigs+"/tokenTest", "r")
+token = prodTokenFile.read();
+token = base64.decodestring(token)
 
 @client.event
 async def on_ready():
@@ -75,7 +78,3 @@ async def on_guild_channel_update(before, after):
     print("DEBUG FUNCTION NOT IMPLEMENTED")
     # await ChannelUtils().chageAgeRestrictionOnChannel(before, after, reloadConfig())
 
-
-
-
-client.run(token)

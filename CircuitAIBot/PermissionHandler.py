@@ -1,7 +1,7 @@
 from CircuitAIBot.CircuitAiJsonFileHandler import CircuitAiJsonFileHandler
+from CircuitAIBot.Config import Config
 
-filePath = "config_Files/botAdminUser.json"
-
+filePath=Config().getConfigPath()+"/botAdminUser.json"
 class PermissionHandler:
 
     def getPermsFromJson(self):

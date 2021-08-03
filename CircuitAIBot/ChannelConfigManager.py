@@ -2,14 +2,16 @@ from CircuitAIBot.CircuitAiJsonFileHandler import CircuitAiJsonFileHandler
 
 
 # Loads and saves the definde JSon Configs. IDs are saved in an array.
+from CircuitAIBot.Config import Config
 
+configPath=Config().getConfigPath()
 class ChannelConfigManager:
     def loadConfigFromJSON(self):
-        return CircuitAiJsonFileHandler().loadJason("config_Files/ChannelConfig.json")
+        return CircuitAiJsonFileHandler().loadJason(configPath+"/ChannelConfig.json")
 
     def saveConfigFromJSON(self, content):
 
-        CircuitAiJsonFileHandler().overwriteJasonFile("config_Files/ChannelConfig.json", content)
+        CircuitAiJsonFileHandler().overwriteJasonFile(configPath+"/ChannelConfig.json", content)
 
     def getStartChannels(self):
         config = self.loadConfigFromJSON()
