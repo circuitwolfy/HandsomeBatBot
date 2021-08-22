@@ -4,4 +4,3 @@ from CircuitAIBot import CircuitAiJsonFileHandler
 from CircuitAIBot import Start
 from CircuitAIBot import PermissionHandler
 
-
