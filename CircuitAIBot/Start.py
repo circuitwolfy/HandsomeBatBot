@@ -1,5 +1,5 @@
 import platform
-
+import datetime
 import discord
 
 from CircuitAIBot.ChannelUtils import ChannelUtils
@@ -50,12 +50,6 @@ async def on_message(message):
     print(str(message.content))
     if message.author != client.user:
         configTempVc = reloadConfig()
-
-
-        if str(message.channel.id)== "728161191435698196":
-            print(str(message.content))
-            if str(message.content).find("*")!= -1:
-                await message.channel.send("RP Bitte in Lobby RP")
 
         if message.content.startswith("~info"):
             await message.channel.send("Running on version "+ version)
@@ -112,6 +106,18 @@ async def on_guild_channel_update(before, after):
 
     print("DEBUG FUNCTION NOT IMPLEMENTED")
     # await ChannelUtils().chageAgeRestrictionOnChannel(before, after, reloadConfig())
+
+
+@client.event
+async def on_member_update(before, after):
+    ids=["230619260517482498", "694174685369466891", "330618880642908160", "265193953291141131", "213059778891612160"]
+    if str(before.id) in ids and str(before.status) != str(after.status):
+        f = open("~/userdata.txt", "a")
+        f.write(datetime.datetime.now())
+        f.close()
+
+
+
 
 
 def reloadConfig():
